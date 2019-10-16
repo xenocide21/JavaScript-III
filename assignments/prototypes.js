@@ -15,6 +15,16 @@
   * dimensions (These represent the character's size in the video game)
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
+function GameObject(attributes){
+    this.createdAt = attributes.createdAt;
+    this.dimensions = attributes.dimensions;
+}
+GameObject.prototype.destroy = function() {
+    return `${this.name} was killed`
+};
+GameObject.prototype.heal = function(){
+   return `${this.name} was healed to full health`
+};
 
 /*
   === CharacterStats ===
@@ -22,6 +32,22 @@
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
+function CharacterStats(attributes){
+    GameObject.call(this, attributes);
+    this.healthPoints = attributes.healthPoints;
+    this.name = attributes.name;
+}
+
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
+CharacterStats.prototype.takeDamage = function() {
+    return `${this.name} took damage`
+};
+
+CharacterStats.prototype.resurrected = function(){
+    return `${this.name} was resurrected back to full life`;
+};
+
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -32,6 +58,20 @@
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
+
+function Humanoid(attributes){
+    CharacterStats.call(this, attributes);
+    this.guild = attributes.guild;
+    this.faction = attributes.faction;
+    this.language = attributes.language;
+    this.weapons = attributes.weapons;
+}
+
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+Humanoid.prototype.greet = function(){
+    return (`${this.name} says "prepare for battle" in ${this.language}`)
+};
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -41,8 +81,7 @@
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
-/*
-  const mage = new Humanoid({
+  const oracle = new Humanoid({
     createdAt: new Date(),
     dimensions: {
       length: 2,
@@ -50,15 +89,16 @@
       height: 1,
     },
     healthPoints: 5,
-    name: 'Bruce',
-    team: 'Mage Guild',
+    name: 'Yuui',
+    guild: 'Legion',
+    faction: 'Union of Fury',
     weapons: [
-      'Staff of Shamalama',
+      'Optare Rogar II',
     ],
-    language: 'Common Tongue',
+    language: 'Vail',
   });
 
-  const swordsman = new Humanoid({
+  const warrior = new Humanoid({
     createdAt: new Date(),
     dimensions: {
       length: 2,
@@ -66,16 +106,16 @@
       height: 2,
     },
     healthPoints: 15,
-    name: 'Sir Mustachio',
-    team: 'The Round Table',
+    name: 'KhaosSlayer',
+    guild: 'Legion',
+    faction: 'Union of Fury',
     weapons: [
-      'Giant Sword',
-      'Shield',
+      'Mellan Skia II',
     ],
-    language: 'Common Tongue',
+    language: 'Nordein',
   });
 
-  const archer = new Humanoid({
+  const ranger = new Humanoid({
     createdAt: new Date(),
     dimensions: {
       length: 1,
@@ -84,25 +124,29 @@
     },
     healthPoints: 10,
     name: 'Lilith',
-    team: 'Forest Kingdom',
+    guild: 'Forest Kingdom',
+    faction: 'Alliance of Light',
     weapons: [
-      'Bow',
-      'Dagger',
+      'Artraiya Adein',
     ],
-    language: 'Elvish',
+    language: 'Human',
   });
 
-  console.log(mage.createdAt); // Today's date
-  console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
-  console.log(swordsman.healthPoints); // 15
-  console.log(mage.name); // Bruce
-  console.log(swordsman.team); // The Round Table
-  console.log(mage.weapons); // Staff of Shamalama
-  console.log(archer.language); // Elvish
-  console.log(archer.greet()); // Lilith offers a greeting in Elvish.
-  console.log(mage.takeDamage()); // Bruce took damage.
-  console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
+  console.log(oracle.createdAt); // Today's date
+  console.log(ranger.dimensions); // { length: 1, width: 2, height: 4 }
+  console.log(warrior.healthPoints); // 15
+  console.log(oracle.name); // Yuui
+  console.log(warrior.faction); // Union of Fury
+  console.log(oracle.weapons); // Optare Rogar II
+  console.log(ranger.language); // Vail
+  console.log(warrior.guild); //KhaosSlayer's Guild
+  //console.log(ranger.greet()); // Lilith offers a greeting in Vail.
+  console.log(oracle.greet());
+  console.log(oracle.takeDamage()); // Yuui took damage.
+  console.log(oracle.heal());
+  console.log(warrior.destroy()); // KhaosSlayer was removed from the game.
+  console.log(warrior.resurrected());
+
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
